@@ -1,7 +1,7 @@
 hive-testbench
 ==============
 
-A testbench for experimenting with Apache Hive at any data scale.
+A testbench for experimenting with Apache Hive at Arenadata Hadoop 2.1.
 
 Overview
 ========
@@ -12,19 +12,21 @@ Prerequisites
 =============
 
 You will need:
-* Hadoop 2.2 or later cluster or Sandbox.
+* ADH 2.1 cluster.
 * Apache Hive.
 * Between 15 minutes and 2 days to generate data (depending on the Scale Factor you choose and available hardware).
-* If you plan to generate 1TB or more of data, using Apache Hive 13+ to generate the data is STRONGLY suggested.
 
 Install and Setup
 =================
 
-All of these steps should be carried out on your Hadoop cluster.
+All of these steps should be carried out on your ADH 2.1 cluster.
 
 - Step 1: Prepare your environment.
-
-  In addition to Hadoop and Hive, before you begin ensure ```gcc``` is installed and available on your system path. If you system does not have it, install it using yum or apt-get.
+```
+cd /opt
+wget https://github.com/stanislav-gabdulgaziev/hive-testbench.git 
+```
+ 
 
 - Step 2: Decide which test suite(s) you want to use.
 
