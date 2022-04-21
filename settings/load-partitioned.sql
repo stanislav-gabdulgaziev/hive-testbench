@@ -29,3 +29,4 @@ set hive.tez.min.partition.factor=0.01;
 -- set io.sort.mb=800;
 
 set hive.optimize.sort.dynamic.partition.threshold=0;
+set hive.tez.container.size=8192;

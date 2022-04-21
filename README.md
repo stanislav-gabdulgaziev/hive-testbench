@@ -12,7 +12,7 @@ Prerequisites
 =============
 
 You will need:
-* ADH 2.1 cluster.
+* ADH 2.1 cluster on RH 7/Centos 7.
 * Apache Hive.
 * Between 15 minutes and 2 days to generate data (depending on the Scale Factor you choose and available hardware).
 
@@ -22,20 +22,24 @@ Install and Setup
 All of these steps should be carried out on your ADH 2.1 cluster.
 
 - Step 1: Prepare your environment.
+-- Load and unzip repo
 ```
 cd /opt
-wget https://github.com/stanislav-gabdulgaziev/hive-testbench.git 
+wget https://github.com/stanislav-gabdulgaziev/hive-testbench/archive/refs/heads/adh21.zip
+unzip adh21.zip
+cd adh21/
 ```
- 
 
-- Step 2: Decide which test suite(s) you want to use.
-
-  hive-testbench comes with data generators and sample queries based on both the TPC-DS and TPC-H benchmarks. You can choose to use either or both of these benchmarks for experiementation. More information about these benchmarks can be found at the Transaction Processing Council homepage.
-
-- Step 3: Compile and package the appropriate data generator.
-
-  For TPC-DS, ```./tpcds-build.sh``` downloads, compiles and packages the TPC-DS data generator.
-  For TPC-H, ```./tpch-build.sh``` downloads, compiles and packages the TPC-H data generator.
+--install maven and devtools for compile
+```
+yum install maven
+yum install java-devel
+```
+-- compile all for tpc-ds test
+```
+cd /root/hive-testbench-adh21/tpcds-gen
+make
+```
 
 - Step 4: Decide how much data you want to generate.
 
@@ -49,6 +53,8 @@ wget https://github.com/stanislav-gabdulgaziev/hive-testbench.git
 
   Some examples:
 
+  Build 1 TB of TPC-DS data in ORC format with logs ```nohup ./tpcds-setup.sh 1000 >>/tmp/tptcd-setup_1000.log 2>&1 &```
+  
   Build 1 TB of TPC-DS data: ```./tpcds-setup.sh 1000```
 
   Build 1 TB of TPC-H data: ```./tpch-setup.sh 1000```
@@ -61,33 +67,30 @@ wget https://github.com/stanislav-gabdulgaziev/hive-testbench.git
   
   Also check other parameters in setup scripts important one is BUCKET_DATA.
 
+  
+
 - Step 6: Run queries.
+  You can use manual startup in beeline or hive or using a script runSuit.py for automation. 
+- Before edit the section "Tuning" in the sample-queries-tpcds/testbench.settings file
 
   More than 50 sample TPC-DS queries and all TPC-H queries are included for you to try. You can use ```hive```, ```beeline``` or the SQL tool of your choice. The testbench also includes a set of suggested settings.
 
   This example assumes you have generated 1 TB of TPC-DS data during Step 5:
 
-  	```
-  	cd sample-queries-tpcds
-  	hive -i testbench.settings
-  	hive> use tpcds_bin_partitioned_orc_1000;
-  	hive> source query55.sql;
-  	```
+      ```
+      cd sample-queries-tpcds
+      hive -i testbench.settings
+      hive> use tpcds_bin_partitioned_orc_1000;
+      hive> source query55.sql;
+      ```
 
   Note that the database is named based on the Data Scale chosen in step 3. At Data Scale 10000, your database will be named tpcds_bin_partitioned_orc_10000. At Data Scale 1000 it would be named tpch_flat_orc_1000. You can always ```show databases``` to get a list of available databases.
 
   Similarly, if you generated 1 TB of TPC-H data during Step 5:
 
-  	```
-  	cd sample-queries-tpch
-  	hive -i testbench.settings
-  	hive> use tpch_flat_orc_1000;
-  	hive> source tpch_query1.sql;
-  	```
-
-Feedback
-========
-
-If you have questions, comments or problems, visit the [Hortonworks Hive forum](http://hortonworks.com/community/forums/forum/hive/).
-
-If you have improvements, pull requests are accepted.
+      ```
+      cd sample-queries-tpch
+      hive -i testbench.settings
+      hive> use tpch_flat_orc_1000;
+      hive> source tpch_query1.sql;
+      ```
