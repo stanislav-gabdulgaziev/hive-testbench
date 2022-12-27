@@ -30,7 +30,7 @@ unzip adh21.zip
 cd adh21/
 ```
 
---install maven and devtools for compile
+--Install maven and devtools for compile from packet manager or manually for example use this https://linuxize.com/post/how-to-install-apache-maven-on-centos-7/
 ```
 yum install maven
 yum install java-devel
